@@ -1,0 +1,269 @@
+[gd_scene load_steps=25 format=3 uid="uid://crg2pg3yaflwk"]
+
+[ext_resource type="Script" uid="uid://b6dsqtadb8jbs" path="res://Scripts/FactoryManager.cs" id="1_f8ioi"]
+[ext_resource type="Resource" uid="uid://d1b2fqkprdwu4" path="res://Resources/Shift1.tres" id="2_hrnko"]
+[ext_resource type="PackedScene" uid="uid://dmyxmftfries" path="res://Scenes/Player.tscn" id="2_kwcbp"]
+[ext_resource type="Resource" uid="uid://dxgdcwwk8ewni" path="res://Resources/Shift2.tres" id="3_ki4ob"]
+[ext_resource type="AudioStream" uid="uid://yayfi8pf55ko" path="res://Sounds/popup.mp3" id="4_pmrhi"]
+[ext_resource type="AudioStream" uid="uid://bs3ftoyu4t25v" path="res://Sounds/export.mp3" id="5_biih5"]
+[ext_resource type="Script" uid="uid://dbg7r5c3heocs" path="res://Scripts/Door.cs" id="5_ki4ob"]
+[ext_resource type="AudioStream" uid="uid://cgl7ygta4coo3" path="res://Sounds/discard.mp3" id="6_k3osj"]
+[ext_resource type="AudioStream" uid="uid://b5uw3hi6sgfv0" path="res://Sounds/door.mp3" id="7_n4kmm"]
+[ext_resource type="AudioStream" uid="uid://b5w3ectdnkwqr" path="res://Sounds/shift_end.mp3" id="8_vu166"]
+[ext_resource type="AudioStream" uid="uid://7sh82di6xpvh" path="res://Sounds/toy.mp3" id="9_tl8r5"]
+[ext_resource type="AudioStream" uid="uid://dyervbg1p7cbr" path="res://Sounds/jam.mp3" id="10_5j1ci"]
+[ext_resource type="AudioStream" uid="uid://covx5krodfny6" path="res://Sounds/conveyer.mp3" id="11_gvpt6"]
+[ext_resource type="AudioStream" uid="uid://bswnwdc4gqmqt" path="res://Sounds/music.mp3" id="12_t8vjy"]
+[ext_resource type="AudioStream" uid="uid://cyqyoo1c8w1wb" path="res://Sounds/hover.mp3" id="13_biih5"]
+[ext_resource type="AudioStream" uid="uid://bpq3wpgny4cx" path="res://Sounds/close.mp3" id="14_n7jbp"]
+[ext_resource type="AudioStream" uid="uid://c5ld0a2t05hgy" path="res://Sounds/dialogue.mp3" id="15_lhvby"]
+[ext_resource type="FontFile" uid="uid://c200rpxfm623x" path="res://Fonts/CreeperPixelRegular-DMYx.ttf" id="17_lhvby"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrnko"]
+bg_color = Color(0.13333334, 0.3647059, 0.88235295, 0.47058824)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ki4ob"]
+bg_color = Color(0.6, 0.09019608, 0.09411765, 0.47058824)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ki4ob"]
+size = Vector2(20, 239)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hrnko"]
+size = Vector2(498, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_45q88"]
+size = Vector2(233, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kblv6"]
+size = Vector2(81, 61)
+
+[node name="MainFactory" type="Node2D" node_paths=PackedStringArray("PlayerCharacter", "SpawnPoint", "InspectPoint", "DialogueLabel", "ClockLabel", "SpeakSpellPanel", "DarknessOverlay", "ExportLabel", "DiscardLabel", "MeaningBar", "SanityBar", "ExitDoor", "SFXInteraction", "SFXExport", "SFXDiscard", "SFXDoor", "SFXCelebration", "SFXToySpawn", "SFXJammed", "SFXConveyor", "SFXMusic", "SFXHover", "SFXCancel", "SFXDialogue")]
+position = Vector2(-1, -3)
+script = ExtResource("1_f8ioi")
+AllShifts = Array[Object]([ExtResource("2_hrnko"), ExtResource("3_ki4ob")])
+PlayerCharacter = NodePath("Player")
+SpawnPoint = NodePath("SpawnPoint")
+InspectPoint = NodePath("InspectPoint")
+DialogueLabel = NodePath("HudLayer/HUD/SpeakSpellPanel/DialogueLabel")
+ClockLabel = NodePath("HudLayer/HUD/ClockLabel")
+SpeakSpellPanel = NodePath("HudLayer/HUD/SpeakSpellPanel")
+DarknessOverlay = NodePath("Darkness")
+ExportLabel = NodePath("HudLayer/HUD/SpeakSpellPanel/ChoicesContainer/ExportLabel")
+DiscardLabel = NodePath("HudLayer/HUD/SpeakSpellPanel/ChoicesContainer/DiscardLabel")
+MeaningBar = NodePath("HudLayer/HUD/MeaningBar")
+SanityBar = NodePath("HudLayer/HUD/SanityBar")
+ExitDoor = NodePath("Door")
+SFXInteraction = NodePath("SFXInteraction")
+SFXExport = NodePath("SFXInteraction/SFXExport")
+SFXDiscard = NodePath("SFXInteraction/SFXDiscard")
+SFXDoor = NodePath("SFXInteraction/SFXDoor")
+SFXCelebration = NodePath("SFXInteraction/SFXCelebration")
+SFXToySpawn = NodePath("SFXInteraction/SFXToySpawn")
+SFXJammed = NodePath("SFXInteraction/SFXJammed")
+SFXConveyor = NodePath("SFXInteraction/SFXConveyer")
+SFXMusic = NodePath("SFXInteraction/SFXMusic")
+SFXHover = NodePath("SFXInteraction/SFXHover")
+SFXCancel = NodePath("SFXInteraction/SFXCancel")
+SFXDialogue = NodePath("SFXInteraction/SFXDialogue")
+
+[node name="SFXInteraction" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_pmrhi")
+volume_db = -5.0
+
+[node name="SFXDiscard" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("6_k3osj")
+volume_db = -15.0
+
+[node name="SFXMusic" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("12_t8vjy")
+volume_db = -10.0
+
+[node name="SFXConveyer" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("11_gvpt6")
+volume_db = -22.0
+
+[node name="SFXJammed" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("10_5j1ci")
+volume_db = -10.0
+
+[node name="SFXToySpawn" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("9_tl8r5")
+volume_db = -10.0
+
+[node name="SFXCelebration" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("8_vu166")
+volume_db = -10.0
+
+[node name="SFXDoor" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("7_n4kmm")
+volume_db = -5.0
+
+[node name="SFXExport" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("5_biih5")
+volume_db = -18.5
+
+[node name="SFXHover" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("13_biih5")
+volume_db = -15.0
+
+[node name="SFXCancel" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("14_n7jbp")
+volume_db = -15.0
+
+[node name="SFXDialogue" type="AudioStreamPlayer" parent="SFXInteraction"]
+stream = ExtResource("15_lhvby")
+volume_db = -20.0
+
+[node name="Player" parent="." instance=ExtResource("2_kwcbp")]
+position = Vector2(345, -6)
+
+[node name="SpawnTimer" type="Timer" parent="."]
+
+[node name="ShiftTimer" type="Timer" parent="."]
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="HudLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ClockLabel" type="Label" parent="HudLayer/HUD"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 314.0
+offset_bottom = 17.0
+theme_override_fonts/font = ExtResource("17_lhvby")
+text = "12 AM"
+
+[node name="MeaningBar" type="ProgressBar" parent="HudLayer/HUD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 18.0
+offset_bottom = 36.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_hrnko")
+fill_mode = 3
+show_percentage = false
+
+[node name="SanityBar" type="ProgressBar" parent="HudLayer/HUD"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 6.0
+offset_right = 28.0
+offset_bottom = 36.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_ki4ob")
+value = 100.0
+fill_mode = 3
+show_percentage = false
+
+[node name="SpeakSpellPanel" type="Panel" parent="HudLayer/HUD"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 123.0
+offset_right = 315.0
+offset_bottom = 167.0
+
+[node name="DialogueLabel" type="RichTextLabel" parent="HudLayer/HUD/SpeakSpellPanel"]
+layout_mode = 0
+offset_right = 303.0
+offset_bottom = 40.0
+theme_override_fonts/normal_font = ExtResource("17_lhvby")
+theme_override_fonts/bold_font = ExtResource("17_lhvby")
+theme_override_fonts/bold_italics_font = ExtResource("17_lhvby")
+theme_override_fonts/italics_font = ExtResource("17_lhvby")
+theme_override_fonts/mono_font = ExtResource("17_lhvby")
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+bbcode_enabled = true
+scroll_active = false
+
+[node name="ChoicesContainer" type="HBoxContainer" parent="HudLayer/HUD/SpeakSpellPanel"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 17.0
+offset_right = 307.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="ExportLabel" type="Label" parent="HudLayer/HUD/SpeakSpellPanel/ChoicesContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("17_lhvby")
+theme_override_font_sizes/font_size = 14
+
+[node name="DiscardLabel" type="Label" parent="HudLayer/HUD/SpeakSpellPanel/ChoicesContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("17_lhvby")
+theme_override_font_sizes/font_size = 14
+
+[node name="InspectPoint" type="Marker2D" parent="."]
+position = Vector2(160, 100)
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -1
+offset_left = -80.0
+offset_top = -40.0
+offset_right = 400.0
+offset_bottom = 220.0
+color = Color(0.18359044, 0.18359044, 0.18359044, 1)
+
+[node name="Darkness" type="CanvasModulate" parent="."]
+z_index = 2
+
+[node name="Walls" type="StaticBody2D" parent="."]
+position = Vector2(398, -20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, 109.5)
+shape = SubResource("RectangleShape2D_ki4ob")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Walls"]
+position = Vector2(-478, 237)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2"]
+position = Vector2(239, 0)
+shape = SubResource("RectangleShape2D_hrnko")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls/StaticBody2D2"]
+position = Vector2(0, -257)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2/StaticBody2D"]
+position = Vector2(239, 0)
+shape = SubResource("RectangleShape2D_hrnko")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Walls/StaticBody2D2/StaticBody2D"]
+position = Vector2(0, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2/StaticBody2D/StaticBody2D3"]
+position = Vector2(0, 109.5)
+shape = SubResource("RectangleShape2D_ki4ob")
+
+[node name="Conveyer" type="StaticBody2D" parent="."]
+position = Vector2(4, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyer"]
+position = Vector2(58.5, 0)
+shape = SubResource("RectangleShape2D_45q88")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(324, -32)
+script = ExtResource("5_ki4ob")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+position = Vector2(19.5, -18.5)
+shape = SubResource("RectangleShape2D_kblv6")

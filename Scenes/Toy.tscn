@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://k5rwq5ovwkat"]
+
+[ext_resource type="Script" uid="uid://du64xi8soxj5d" path="res://Scripts/Toy.cs" id="1_olmea"]
+[ext_resource type="Texture2D" uid="uid://c1e27yj63s8hm" path="res://Sprites/bear.png" id="2_olmea"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s3peh"]
+size = Vector2(140, 138)
+
+[node name="Toy" type="Area2D"]
+script = ExtResource("1_olmea")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_olmea")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0.5)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_s3peh")

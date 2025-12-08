@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ShiftData" load_steps=3 format=3 uid="uid://d1b2fqkprdwu4"]
+
+[ext_resource type="PackedScene" uid="uid://k5rwq5ovwkat" path="res://Scenes/Toy.tscn" id="1_66ddj"]
+[ext_resource type="Script" uid="uid://bhxtx0rwoaast" path="res://Scripts/ShiftData.cs" id="1_beovu"]
+
+[resource]
+script = ExtResource("1_beovu")
+ToyScene = ExtResource("1_66ddj")
+IntroText = "1st shift, welcome. How's it going Aimon?"
+ScriptedThoughts = null

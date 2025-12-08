@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ShiftData" load_steps=3 format=3 uid="uid://dxgdcwwk8ewni"]
+
+[ext_resource type="PackedScene" uid="uid://k5rwq5ovwkat" path="res://Scenes/Toy.tscn" id="1_3odtb"]
+[ext_resource type="Script" uid="uid://bhxtx0rwoaast" path="res://Scripts/ShiftData.cs" id="1_k88sb"]
+
+[resource]
+script = ExtResource("1_k88sb")
+ShiftName = "Shift 2"
+ToyScene = ExtResource("1_3odtb")
+IntroText = "Shift 2, do as you please."
+ScriptedThoughts = Dictionary[int, String]({})
