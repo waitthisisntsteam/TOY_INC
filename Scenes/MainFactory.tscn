@@ -1,9 +1,10 @@
-[gd_scene load_steps=25 format=3 uid="uid://crg2pg3yaflwk"]
+[gd_scene load_steps=28 format=3 uid="uid://crg2pg3yaflwk"]
 
 [ext_resource type="Script" uid="uid://b6dsqtadb8jbs" path="res://Scripts/FactoryManager.cs" id="1_f8ioi"]
 [ext_resource type="Resource" uid="uid://d1b2fqkprdwu4" path="res://Resources/Shift1.tres" id="2_hrnko"]
 [ext_resource type="PackedScene" uid="uid://dmyxmftfries" path="res://Scenes/Player.tscn" id="2_kwcbp"]
 [ext_resource type="Resource" uid="uid://dxgdcwwk8ewni" path="res://Resources/Shift2.tres" id="3_ki4ob"]
+[ext_resource type="Texture2D" uid="uid://b2h7x8hfvsjpc" path="res://Sprites/Toy INC background.jpeg" id="4_aqrxo"]
 [ext_resource type="AudioStream" uid="uid://yayfi8pf55ko" path="res://Sounds/popup.mp3" id="4_pmrhi"]
 [ext_resource type="AudioStream" uid="uid://bs3ftoyu4t25v" path="res://Sounds/export.mp3" id="5_biih5"]
 [ext_resource type="Script" uid="uid://dbg7r5c3heocs" path="res://Scripts/Door.cs" id="5_ki4ob"]
@@ -34,16 +35,22 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ki4ob"]
-size = Vector2(20, 239)
+size = Vector2(20, 276)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hrnko"]
-size = Vector2(498, 20)
+size = Vector2(507, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aqrxo"]
+size = Vector2(20, 283)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ddvy"]
+size = Vector2(106, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_45q88"]
-size = Vector2(233, 20)
+size = Vector2(379, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kblv6"]
-size = Vector2(81, 61)
+size = Vector2(81, 92)
 
 [node name="MainFactory" type="Node2D" node_paths=PackedStringArray("PlayerCharacter", "SpawnPoint", "InspectPoint", "DialogueLabel", "ClockLabel", "SpeakSpellPanel", "DarknessOverlay", "ExportLabel", "DiscardLabel", "MeaningBar", "SanityBar", "ExitDoor", "SFXInteraction", "SFXExport", "SFXDiscard", "SFXDoor", "SFXCelebration", "SFXToySpawn", "SFXJammed", "SFXConveyor", "SFXMusic", "SFXHover", "SFXCancel", "SFXDialogue")]
 position = Vector2(-1, -3)
@@ -74,9 +81,14 @@ SFXHover = NodePath("SFXInteraction/SFXHover")
 SFXCancel = NodePath("SFXInteraction/SFXCancel")
 SFXDialogue = NodePath("SFXInteraction/SFXDialogue")
 
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(158.45355, 88.5)
+scale = Vector2(0.23281792, 0.23281786)
+texture = ExtResource("4_aqrxo")
+
 [node name="SFXInteraction" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_pmrhi")
-volume_db = -5.0
+volume_db = -10.0
 
 [node name="SFXDiscard" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("6_k3osj")
@@ -84,7 +96,7 @@ volume_db = -15.0
 
 [node name="SFXMusic" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("12_t8vjy")
-volume_db = -10.0
+volume_db = -15.0
 
 [node name="SFXConveyer" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("11_gvpt6")
@@ -108,22 +120,22 @@ volume_db = -5.0
 
 [node name="SFXExport" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("5_biih5")
-volume_db = -18.5
+volume_db = -20.0
 
 [node name="SFXHover" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("13_biih5")
-volume_db = -15.0
+volume_db = -20.0
 
 [node name="SFXCancel" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("14_n7jbp")
-volume_db = -15.0
+volume_db = -10.0
 
 [node name="SFXDialogue" type="AudioStreamPlayer" parent="SFXInteraction"]
 stream = ExtResource("15_lhvby")
 volume_db = -20.0
 
 [node name="Player" parent="." instance=ExtResource("2_kwcbp")]
-position = Vector2(345, -6)
+position = Vector2(357, 74)
 
 [node name="SpawnTimer" type="Timer" parent="."]
 
@@ -210,17 +222,10 @@ theme_override_fonts/font = ExtResource("17_lhvby")
 theme_override_font_sizes/font_size = 14
 
 [node name="InspectPoint" type="Marker2D" parent="."]
-position = Vector2(160, 100)
+position = Vector2(181, 64)
 
 [node name="SpawnPoint" type="Marker2D" parent="."]
-
-[node name="Background" type="ColorRect" parent="."]
-z_index = -1
-offset_left = -80.0
-offset_top = -40.0
-offset_right = 400.0
-offset_bottom = 220.0
-color = Color(0.18359044, 0.18359044, 0.18359044, 1)
+position = Vector2(-56, 59)
 
 [node name="Darkness" type="CanvasModulate" parent="."]
 z_index = 2
@@ -229,41 +234,41 @@ z_index = 2
 position = Vector2(398, -20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
-position = Vector2(0, 109.5)
+position = Vector2(16, 115.5)
 shape = SubResource("RectangleShape2D_ki4ob")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="Walls"]
 position = Vector2(-478, 237)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2"]
-position = Vector2(239, 0)
+position = Vector2(242.5, 8)
 shape = SubResource("RectangleShape2D_hrnko")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Walls/StaticBody2D2"]
-position = Vector2(0, -257)
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+position = Vector2(-496, 4)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2/StaticBody2D"]
-position = Vector2(239, 0)
-shape = SubResource("RectangleShape2D_hrnko")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 105.5)
+shape = SubResource("RectangleShape2D_aqrxo")
 
-[node name="StaticBody2D3" type="StaticBody2D" parent="Walls/StaticBody2D2/StaticBody2D"]
-position = Vector2(0, 20)
+[node name="StaticBody2D3" type="StaticBody2D" parent="Walls"]
+position = Vector2(-86, 13)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2/StaticBody2D/StaticBody2D3"]
-position = Vector2(0, 109.5)
-shape = SubResource("RectangleShape2D_ki4ob")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D3"]
+position = Vector2(43, 0)
+shape = SubResource("RectangleShape2D_6ddvy")
 
 [node name="Conveyer" type="StaticBody2D" parent="."]
 position = Vector2(4, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyer"]
-position = Vector2(58.5, 0)
+position = Vector2(119.5, 51.5)
 shape = SubResource("RectangleShape2D_45q88")
 
 [node name="Door" type="Area2D" parent="."]
-position = Vector2(324, -32)
+position = Vector2(332, 40)
 script = ExtResource("5_ki4ob")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
-position = Vector2(19.5, -18.5)
+position = Vector2(19.5, -34)
 shape = SubResource("RectangleShape2D_kblv6")

@@ -28,6 +28,7 @@ public partial class Player : CharacterBody2D
     
     [Export] public float Speed = 150.0f;                   // Movement speed in pixels/second
     [Export] public RayCast2D InteractionRay;               // Ray for detecting interactables
+    [Export] public Area2D InteractionArea;                 // Area for detecting close-range interactables
     [Export] public AnimatedSprite2D AnimatedSprite;        // Character sprite animations
     [Export] public AudioStreamPlayer SFXWalk;              // Walking sound (looping)
     [Export] public AudioStreamPlayer SFXBump;              // Collision with wall sound
@@ -259,7 +260,7 @@ public partial class Player : CharacterBody2D
         }
 
         // Apply direction and force immediate update
-        InteractionRay.TargetPosition = cardinalDir * 60.0f;
+        InteractionRay.TargetPosition = cardinalDir * 30.0f;
         InteractionRay.ForceRaycastUpdate();
     }
     
@@ -284,31 +285,63 @@ public partial class Player : CharacterBody2D
 
     /// <summary>
     /// Handles unprocessed input for interaction (Z key).
-    /// Detects Toy and Door collisions via raycast.
+    /// Detects Toy and Door via point query first, then raycast for distant objects.
     /// </summary>
     public override void _UnhandledInput(InputEvent @event)
     {
         if (@event is InputEventKey keyEvent && keyEvent.Pressed && keyEvent.Keycode == Key.Z)
         {
-            if (!IsFrozen && InteractionRay != null)
+            if (!IsFrozen)
             {
-                InteractionRay.ForceRaycastUpdate();
-                if (InteractionRay.IsColliding())
+                GodotObject objectHit = null;
+                
+                // First: check for areas at player's position using point query
+                var spaceState = GetWorld2D().DirectSpaceState;
+                var pointParams = new PhysicsPointQueryParameters2D();
+                pointParams.Position = GlobalPosition;
+                pointParams.CollideWithAreas = true;
+                pointParams.CollideWithBodies = false;
+                
+                var results = spaceState.IntersectPoint(pointParams, 32);
+                if (results.Count > 0)
                 {
-                    var objectHit = InteractionRay.GetCollider();
-                    
-                    // Check for Toy interaction
-                    if (objectHit is Toy toy) 
+                    float closestDist = float.MaxValue;
+                    foreach (var result in results)
                     {
-                        toy.Interact();
-                        GetViewport().SetInputAsHandled(); 
+                        var collider = result["collider"].AsGodotObject();
+                        if (collider is Toy || collider is Door)
+                        {
+                            var node = collider as Node2D;
+                            float dist = GlobalPosition.DistanceTo(node.GlobalPosition);
+                            if (dist < closestDist)
+                            {
+                                closestDist = dist;
+                                objectHit = collider;
+                            }
+                        }
                     }
-                    // Check for Door interaction
-                    else if (objectHit is Door door)
+                }
+                
+                // Fallback: try raycast for directional interaction at range
+                if (objectHit == null && InteractionRay != null)
+                {
+                    InteractionRay.ForceRaycastUpdate();
+                    if (InteractionRay.IsColliding())
                     {
-                        door.Interact();
-                        GetViewport().SetInputAsHandled();
+                        objectHit = InteractionRay.GetCollider();
                     }
+                }
+                
+                // Process the interaction
+                if (objectHit is Toy toy)
+                {
+                    toy.Interact();
+                    GetViewport().SetInputAsHandled();
+                }
+                else if (objectHit is Door door)
+                {
+                    door.Interact();
+                    GetViewport().SetInputAsHandled();
                 }
             }
         }

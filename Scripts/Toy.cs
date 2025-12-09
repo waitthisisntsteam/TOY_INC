@@ -34,7 +34,7 @@ public partial class Toy : Area2D
     
     public string CurrentThought = "Hello";         // Dialogue text displayed on interaction
     public int ToyKey = 0;                          // Key value: even = good, odd = evil
-    public float TargetX = 160.0f;                  // X coordinate where toy stops
+    public float TargetX = 500.0f;                  // X coordinate where toy stops
 
     // =========================================================================
     // ! SIGNALS !
@@ -142,17 +142,19 @@ public partial class Toy : Area2D
         else
         {
             // --- DISCARD ANIMATION ---
-            // Slide right (into bin) and fade out
+            // Slide right (2.5 toy spots = 125px) THEN fade out
             Speed = 0f;
             TargetX = 99999f; // Mark as dismissed
             
+            float distance = 100f;      // 2.5 toy spots (50px each)
+            float moveDuration = 1.25f; // Travel time
+            float fadeDuration = 0.5f;  // Fade time after movement
+            
             var tween = CreateTween();
-            tween.SetParallel(true);
-            // Move 60 pixels to the right (into bin)
-            tween.TweenProperty(this, "position", Position + new Vector2(60, 0), 0.5f);
-            // Fade to transparent
-            tween.TweenProperty(this, "modulate", new Color(1, 1, 1, 0), 0.5f);
-            tween.SetParallel(false);
+            // First: move 125 pixels to the right
+            tween.TweenProperty(this, "position", Position + new Vector2(distance, 0), moveDuration);
+            // Then: fade to transparent
+            tween.TweenProperty(this, "modulate", new Color(1, 1, 1, 0), fadeDuration);
             tween.TweenCallback(Callable.From(QueueFree));
         }
     }

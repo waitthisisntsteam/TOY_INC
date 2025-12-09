@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 // ==============================================================================
 // ! FACTORYMANAGER.CS - Main Game Controller !
@@ -86,6 +88,11 @@ public partial class FactoryManager : Node2D
     private int _toySpawnCount = 0;         // Total toys spawned this shift
     private int _toysInQueue = 0;           // Number of toys waiting in queue
     
+    // --- Toy Sprite System ---
+    private List<ToySprite> _goodToySprites = new List<ToySprite>();   // Even-numbered sprites
+    private List<ToySprite> _evilToySprites = new List<ToySprite>();   // Odd-numbered sprites
+    private RandomNumberGenerator _rng = new RandomNumberGenerator();  // For random selection
+    
     // --- Shift Management ---
     private ShiftData _activeData;          // Current shift configuration (null = shift ended)
     private int _currentShiftIndex = 0;     // Which shift we're on (0-based)
@@ -159,6 +166,10 @@ public partial class FactoryManager : Node2D
         {
             SFXMusic.Play();
         }
+        
+        // Load toy sprites from Toys folder
+        _rng.Randomize();
+        LoadToySprites();
 
         // Begin first shift if shifts are configured
         if (AllShifts != null && AllShifts.Length > 0)
@@ -885,6 +896,84 @@ public partial class FactoryManager : Node2D
     }
 
     // =========================================================================
+    // ! TOY SPRITE LOADING !
+    // =========================================================================
+
+    /// <summary>
+    /// Loads all toy sprites from the Toys folder.
+    /// Parses filename to extract number and message.
+    /// Format: name_number.png (e.g., bear_1.png, train_2.png)
+    /// Odd numbers = evil, Even numbers = good.
+    /// </summary>
+    private void LoadToySprites()
+    {
+        string toysPath = "res://Toys/";
+        var dir = DirAccess.Open(toysPath);
+        
+        if (dir == null)
+        {
+            GD.PrintErr("Failed to open Toys directory");
+            return;
+        }
+        
+        dir.ListDirBegin();
+        string fileName = dir.GetNext();
+        
+        while (fileName != "")
+        {
+            // Skip directories and .import files
+            if (!dir.CurrentIsDir() && fileName.EndsWith(".png"))
+            {
+                // Extract number from filename using regex
+                // Matches any digits at the end of the filename before .png
+                var match = Regex.Match(fileName, @"(\d+)\.png$");
+                
+                if (match.Success)
+                {
+                    int number = int.Parse(match.Groups[1].Value);
+                    
+                    // Load the texture
+                    string fullPath = toysPath + fileName;
+                    var texture = GD.Load<Texture2D>(fullPath);
+                    
+                    if (texture != null)
+                    {
+                        // Create message based on toy name (remove number and extension)
+                        string baseName = fileName.Substring(0, fileName.Length - match.Groups[0].Value.Length);
+                        baseName = baseName.TrimEnd('_', '-', ' ');
+                        
+                        var toySprite = new ToySprite
+                        {
+                            Texture = texture,
+                            Number = number,
+                            Message = (number % 2 == 0) 
+                                ? $"I'm a friendly {baseName}!" 
+                                : $"I'm an evil {baseName}..."
+                        };
+                        
+                        // Sort into good (even) or evil (odd) list
+                        if (number % 2 == 0)
+                        {
+                            _goodToySprites.Add(toySprite);
+                        }
+                        else
+                        {
+                            _evilToySprites.Add(toySprite);
+                        }
+                        
+                        GD.Print($"Loaded toy sprite: {fileName} (number: {number}, evil: {number % 2 != 0})");
+                    }
+                }
+            }
+            
+            fileName = dir.GetNext();
+        }
+        
+        dir.ListDirEnd();
+        GD.Print($"Loaded {_goodToySprites.Count} good sprites, {_evilToySprites.Count} evil sprites");
+    }
+
+    // =========================================================================
     // ! TOY SPAWNING !
     // =========================================================================
 
@@ -958,14 +1047,30 @@ public partial class FactoryManager : Node2D
         int toyNumber = _toySpawnCount + 1; // 1-based for readability
         newToy.ToyKey = GetToyKeyForShift(_currentShiftIndex, toyNumber);
         
-        // Set dialogue based on key: even = good, odd = evil
-        if (newToy.ToyKey % 2 == 0)
+        // Set sprite and dialogue based on key: even = good, odd = evil
+        bool isEvil = (newToy.ToyKey % 2 != 0);
+        var spriteList = isEvil ? _evilToySprites : _goodToySprites;
+        
+        if (spriteList.Count > 0)
         {
-            newToy.CurrentThought = "im good";
+            // Pick random sprite from the appropriate list
+            int randomIndex = _rng.RandiRange(0, spriteList.Count - 1);
+            var selectedSprite = spriteList[randomIndex];
+            
+            // Apply texture to toy's Sprite2D
+            var sprite = newToy.GetNodeOrNull<Sprite2D>("Sprite2D");
+            if (sprite != null)
+            {
+                sprite.Texture = selectedSprite.Texture;
+            }
+            
+            // Set dialogue from sprite data
+            newToy.CurrentThought = selectedSprite.Message;
         }
         else
         {
-            newToy.CurrentThought = "im evil";
+            // Fallback if no sprites loaded
+            newToy.CurrentThought = isEvil ? "im evil" : "im good";
         }
         
         _toySpawnCount++;
@@ -1251,4 +1356,18 @@ public partial class FactoryManager : Node2D
             }
         }
     }
+}
+
+// ==============================================================================
+// ! TOYPRITE STRUCT ! - Holds texture and message for a toy sprite
+// ==============================================================================
+
+/// <summary>
+/// Stores a toy sprite texture and its associated dialogue message.
+/// </summary>
+public struct ToySprite
+{
+    public Texture2D Texture;   // The sprite texture
+    public string Message;      // Dialogue message for this toy
+    public int Number;          // The number from filename (determines evil/good)
 }
